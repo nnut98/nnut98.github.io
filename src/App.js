@@ -453,7 +453,7 @@ const BeerCarousel = ({ beers, onSelect, selectedId }) => {
 
 const CanImage = ({ beer }) => {
     return (
-      <div className="w-40 md:w-56 mx-auto relative z-10 filter drop-shadow-2xl transition-transform duration-500 hover:scale-105 group">
+      <div className="w-32 sm:w-40 md:w-56 mx-auto relative z-10 filter drop-shadow-2xl transition-transform duration-500 hover:scale-105 group">
          <div className="relative">
             <img src={beer.imageUrl} alt={beer.name} className="w-full h-auto object-contain relative z-10" />
          </div>
@@ -547,15 +547,15 @@ const CheckoutModal = ({ isOpen, onClose, cartItems, onSubmitOrder }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[80] flex items-center justify-center md:p-4">
             <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose}></div>
-            <div className="bg-white w-full max-w-2xl rounded-[2rem] shadow-2xl relative z-10 overflow-hidden flex flex-col max-h-[90vh]">
-                <div className="p-6 bg-[#003A5D] text-white flex justify-between items-center shrink-0">
+            <div className="bg-white w-full md:max-w-2xl md:rounded-[2rem] shadow-2xl relative z-10 overflow-hidden flex flex-col h-full md:h-auto md:max-h-[90vh]">
+                <div className="p-4 md:p-6 bg-[#003A5D] text-white flex justify-between items-center shrink-0">
                     <h2 className="text-xl font-bold font-['Barlow']">Secure Checkout</h2>
                     <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full"><X size={20} /></button>
                 </div>
                 
-                <div className="overflow-y-auto p-8">
+                <div className="overflow-y-auto p-6 md:p-8 flex-1">
                     <form id="checkout-form" onSubmit={handleSubmit} className="space-y-6">
                         {/* Section 1: Contact */}
                         <div>
@@ -843,18 +843,19 @@ export default function App() {
                     className="flex items-center gap-2 text-xs font-bold text-white bg-[#003A5D] px-4 py-2 rounded-full hover:bg-[#002a44] transition-colors"
                  >
                      <LogIn size={14} />
-                     Login
+                     <span className="hidden sm:inline">Login</span>
                  </button>
              )}
           </div>
         </div>
       </header>
 
-      <main className="flex-grow max-w-7xl mx-auto w-full p-4 md:p-8 grid lg:grid-cols-12 gap-8 items-start relative z-10">
+      {/* Main Container: Switched to flex-col-reverse on mobile so Result appears ABOVE Controls */}
+      <main className="flex-grow max-w-7xl mx-auto w-full p-4 md:p-8 flex flex-col lg:grid lg:grid-cols-12 gap-4 md:gap-8 items-start relative z-10">
         
         {/* LEFT COLUMN: CONTROLS */}
-        <div className="lg:col-span-4 space-y-6 animate-fade-in-up">
-          <div className="bg-white/90 backdrop-blur rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white overflow-hidden p-8">
+        <div className="lg:col-span-4 w-full space-y-6 animate-fade-in-up">
+          <div className="bg-white/90 backdrop-blur rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white overflow-hidden p-6 md:p-8">
              <div className="animate-fade-in">
                  <div className="flex items-center gap-3 mb-6">
                      <div className="bg-[#E6F4F9] p-2 rounded-full">
@@ -863,7 +864,7 @@ export default function App() {
                      <h2 className="text-[#003A5D] font-bold text-lg">Find your flavor</h2>
                  </div>
 
-                {/* UPDATED Style Selector - Eye Catching & Interactive */}
+                {/* UPDATED Style Selector */}
                 <div className="mb-8">
                     <div className="flex items-center justify-between mb-4">
                         <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Select Style</label>
@@ -924,7 +925,7 @@ export default function App() {
         </div>
 
         {/* RIGHT COLUMN: PREVIEW */}
-        <div className="lg:col-span-8 flex flex-col items-center justify-center relative min-h-[500px]">
+        <div className="lg:col-span-8 w-full flex flex-col items-center justify-center relative min-h-[400px] md:min-h-[500px]">
             {isAnimating && (
               <div className="absolute inset-0 z-30 bg-white/60 backdrop-blur-md flex items-center justify-center rounded-[2.5rem]">
                 <div className="flex flex-col items-center animate-bounce">
@@ -938,7 +939,7 @@ export default function App() {
               <div className="w-full grid md:grid-cols-2 gap-0 bg-white rounded-[2.5rem] shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden border border-white transform transition-all duration-500 hover:shadow-[0_25px_50px_rgb(0,0,0,0.12)]">
                 
                 {/* Product Image Section */}
-                <div className="relative bg-[#F8F9FB] h-72 md:h-auto flex items-center justify-center p-8 overflow-hidden group">
+                <div className="relative bg-[#F8F9FB] h-72 min-h-[18rem] md:h-auto flex items-center justify-center p-6 md:p-8 overflow-hidden group">
                      {/* Immersive Background */}
                      <div className="absolute inset-0 z-0 opacity-20 transform scale-150 blur-xl" style={{ backgroundImage: `url(${beer.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(40px) saturate(200%)' }}></div>
                      <div className={`absolute w-96 h-96 rounded-full bg-gradient-to-tr ${beer.colors} opacity-20 blur-3xl transform group-hover:scale-110 transition-transform duration-700 z-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}></div>
@@ -952,16 +953,16 @@ export default function App() {
                 </div>
 
                 {/* Details Section */}
-                <div className="p-8 md:p-10 flex flex-col justify-between relative bg-white/50 backdrop-blur-sm">
+                <div className="p-6 md:p-10 flex flex-col justify-between relative bg-white/50 backdrop-blur-sm">
                   <div>
                     <div className="flex justify-between items-start mb-4">
                         <span className="text-xs font-bold text-slate-400 border-b-2 border-[#ebd923] pb-1 uppercase tracking-wider">{beer.style}</span>
                         {beer.stats.ibu > 40 && <span className="text-[10px] font-bold text-[#003A5D] bg-[#A2D9E7] px-3 py-1 rounded-full">Hoppy</span>}
                     </div>
                     <div className="flex justify-between items-start">
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-[#003A5D] leading-[0.9] mb-2">{beer.name}</h2>
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#003A5D] leading-[0.9] mb-2">{beer.name}</h2>
                         <div className="text-right shrink-0 ml-4">
-                             <p className="text-[#003A5D] font-bold text-xl whitespace-nowrap">฿{beer.price}</p>
+                             <p className="text-[#003A5D] font-bold text-lg md:text-xl whitespace-nowrap">฿{beer.price}</p>
                              <p className="text-xs text-slate-400 whitespace-nowrap">per 6-pack</p>
                         </div>
                     </div>
