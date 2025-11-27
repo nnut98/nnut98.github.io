@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/nnut98.github.io/athletic-apps/static/css/main.71db8efd.css",
+    "main.js": "/nnut98.github.io/athletic-apps/static/js/main.2858e390.js",
+    "static/js/453.5237030f.chunk.js": "/nnut98.github.io/athletic-apps/static/js/453.5237030f.chunk.js",
+    "index.html": "/nnut98.github.io/athletic-apps/index.html",
+    "main.71db8efd.css.map": "/nnut98.github.io/athletic-apps/static/css/main.71db8efd.css.map",
+    "main.2858e390.js.map": "/nnut98.github.io/athletic-apps/static/js/main.2858e390.js.map",
+    "453.5237030f.chunk.js.map": "/nnut98.github.io/athletic-apps/static/js/453.5237030f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.71db8efd.css",
+    "static/js/main.2858e390.js"
+  ]
+}
