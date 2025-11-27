@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/athletic-apps/static/css/main.71db8efd.css",
-    "main.js": "/athletic-apps/static/js/main.38c1978a.js",
-    "static/js/453.5237030f.chunk.js": "/athletic-apps/static/js/453.5237030f.chunk.js",
-    "index.html": "/athletic-apps/index.html",
-    "main.71db8efd.css.map": "/athletic-apps/static/css/main.71db8efd.css.map",
-    "main.38c1978a.js.map": "/athletic-apps/static/js/main.38c1978a.js.map",
-    "453.5237030f.chunk.js.map": "/athletic-apps/static/js/453.5237030f.chunk.js.map"
+    "main.css": "/static/css/main.71db8efd.css",
+    "main.js": "/static/js/main.bff09c0a.js",
+    "static/js/453.5237030f.chunk.js": "/static/js/453.5237030f.chunk.js",
+    "index.html": "/index.html",
+    "main.71db8efd.css.map": "/static/css/main.71db8efd.css.map",
+    "main.bff09c0a.js.map": "/static/js/main.bff09c0a.js.map",
+    "453.5237030f.chunk.js.map": "/static/js/453.5237030f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.71db8efd.css",
-    "static/js/main.38c1978a.js"
+    "static/js/main.bff09c0a.js"
   ]
 }
