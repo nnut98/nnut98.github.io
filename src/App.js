@@ -99,7 +99,7 @@ const BEER_DATA = [
   {
     id: 'mango-sticky',
     name: "Mango Sticky Ale",
-    style: "Fruit",
+    style: "Light",
     tagline: "Thai Dessert Inspired",
     description: "A lush, creamy ale inspired by Thailand's most famous dessert. Bursting with ripe mango sweetness and a hint of coconut creaminess, balanced by a light hop finish.",
     intensity: { hops: 2, malt: 2, body: 4 },
@@ -118,7 +118,7 @@ const BEER_DATA = [
     style: "Sour",
     tagline: "Zesty Thai Botanicals",
     description: "A Belgian-style Witbier reimagined with fresh Thai lemongrass and kaffir lime leaves. incredibly aromatic and refreshing, designed to pair perfectly with spicy Thai salads.",
-    intensity: { hops: 2, malt: 2, body: 2 },
+    intensity: { hops: 1, malt: 1, body: 1 },
     stats: { abv: "< 0.5%", calories: 65, carbs: "12g", ibu: 18 },
     notes: ["Lemongrass", "Citrus", "Spice"],
     imageUrl: lemongrass,
@@ -363,7 +363,7 @@ const BEER_DATA = [
     style: "Dark",
     tagline: "Coffee porter",
     description: "First Ride is an extra dark brew with tremendous depth and nuance. It offers a malt-forward palate that's bold yet crisp, nutty aromatics, and a clean, dry finish. A double-dose of coffee roasts, both medium and dark, burst out of the glass.",
-    intensity: { hops: 2, malt: 5, body: 4 },
+    intensity: { hops: 1, malt: 4, body: 5 },
     stats: { abv: "< 0.5%", calories: 85, carbs: "17g", ibu: 20 },
     notes: ["Dark", "Coffee", "Malt"],
     imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_LTO_FirstRide_12oz_WebStandard_081423.png?v=1762439665&width=1206",
@@ -379,7 +379,7 @@ const BEER_DATA = [
     style: "Dark",
     tagline: "Autumn brown",
     description: "Stump Jump is a smooth and spirited Autumn Brown with bounding flavour and exceptional balance. Toasty and nutty notes hit a harmony alongside aromas of roasted caramel, while a medium body and crisp finish create structure and surprise.",
-    intensity: { hops: 2, malt: 4, body: 3 },
+    intensity: { hops: 2, malt: 3, body: 3 },
     stats: { abv: "< 0.5%", calories: 75, carbs: "15g", ibu: 25 },
     notes: ["Brown", "Malt", "Caramel"],
     imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_5_4234d08e-bbeb-4576-b940-3d7bec818b0f.png?v=1759155826&width=1206",
@@ -429,7 +429,7 @@ const BEER_DATA = [
     style: "Sour",
     tagline: "Pickle-inspired brew",
     description: "Surprisingly dill-ightful! This brew brings the essence of a classic dill pickle straight to your glass. Crafted with cucumber concentrate, Himalayan salt, dill seed, coriander, and a medley of traditional pickling spices, this brew is briny, tart, and boldly herbaceous.",
-    intensity: { hops: 1, malt: 2, body: 2 },
+    intensity: { hops: 1, malt: 1, body: 2 },
     stats: { abv: "< 0.5%", calories: 50, carbs: "11g", ibu: 8 },
     notes: ["Pickle", "Dill", "Salty"],
     imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_Pilot_DillDreams_12oz_WEBSITE_071025.png?v=1762440180&width=1206",
@@ -448,6 +448,11 @@ const findMatch = (preferences) => {
   let candidates = BEER_DATA;
   if (style !== 'All') candidates = BEER_DATA.filter(b => b.style === style);
   if (candidates.length === 0) candidates = BEER_DATA;
+
+  if (style === 'Functional' || style === 'Sour') {
+      return candidates[Math.floor(Math.random() * candidates.length)];
+  }
+
   const scoredBeers = candidates.map(beer => {
     const hopDiff = Math.abs(hops - beer.intensity.hops);
     const maltDiff = Math.abs(malt - beer.intensity.malt);
@@ -455,6 +460,7 @@ const findMatch = (preferences) => {
     let score = hopDiff + maltDiff + bodyDiff;
     if (style === 'IPA') score += hopDiff * 0.5;
     if (style === 'Dark') score += maltDiff * 0.5;
+    if (style === 'Light') score += bodyDiff * 0.5;
     return { ...beer, score };
   });
   scoredBeers.sort((a, b) => a.score - b.score);
@@ -518,9 +524,9 @@ const BeerCarousel = ({ beers, onSelect, selectedId }) => (
           <div className={`w-16 h-20 rounded-xl flex items-center justify-center bg-slate-50 border transition-all relative overflow-hidden ${selectedId === b.id ? 'border-[#003A5D] bg-white shadow-md ring-2 ring-[#003A5D]/10' : 'border-slate-100 group-hover:border-slate-200'}`}>
                {b.id === 'athletic-plus' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">PLUS</div>}
                {b.id === 'siam-crisp' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-[#003A5D] text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
-               {b.id === 'mango-sticky' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-white text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
-               {b.id === 'lemongrass-wit' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-white text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
-               {b.id === 'songkran-splash' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-white text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
+               {b.id === 'mango-sticky' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-[#003A5D] text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
+               {b.id === 'lemongrass-wit' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-[#003A5D] text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
+               {b.id === 'songkran-splash' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-[#003A5D] text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
                <img src={b.imageUrl} alt={b.name} className="w-10 h-auto object-contain" />
           </div>
           <span className={`text-[10px] font-bold text-center leading-tight line-clamp-2 w-full transition-colors ${selectedId === b.id ? 'text-[#003A5D]' : 'text-slate-400'}`}>
