@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Beer, Droplet, Wheat, Award, Zap, RefreshCw, ShoppingBag, X, User, Star, Utensils, LogIn, LogOut, Trash2, ChevronRight, MapPin, CreditCard, Check, LayoutGrid, Sun, Moon, Flower2, Sparkles, Citrus, Medal, Heart, Store, Dumbbell, Briefcase, Handshake, Truck } from 'lucide-react';
 import songkran from './songkran.png';
+import siam from './siam.png';
+import mango from './mango.png';
+import lemongrass from './lemongrass.png';
+import functional from './functional.png';
 
 // --- CONFIGURATION ---
 const NAVY = "#003A5D"; 
@@ -53,7 +57,7 @@ const BEER_DATA = [
     intensity: { hops: 1, malt: 2, body: 1 },
     stats: { abv: "< 0.5%", calories: 40, carbs: "8g", ibu: 12 },
     notes: ["Rice", "Crisp", "Floral"],
-    imageUrl: songkran,
+    imageUrl: siam,
     colors: "from-yellow-200 to-amber-100",
     isMember: false,
     isLimited: true, 
@@ -85,7 +89,7 @@ const BEER_DATA = [
     intensity: { hops: 2, malt: 1, body: 2 },
     stats: { abv: "< 0.5%", calories: 90, carbs: "12g", ibu: 15 },
     notes: ["Functional", "Vitamin B", "Collagen"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_1c8705ba-2e0f-430d-b8e5-193c462c8c60.png?v=1762439849&width=1206",
+    imageUrl: functional,
     colors: "from-teal-400 to-emerald-300",
     isMember: true,
     isLimited: true,
@@ -101,7 +105,7 @@ const BEER_DATA = [
     intensity: { hops: 2, malt: 2, body: 4 },
     stats: { abv: "< 0.5%", calories: 110, carbs: "22g", ibu: 10 },
     notes: ["Mango", "Coconut", "Sweet"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_275ba9d0-774e-47d2-a95a-8c7275f60020.png?v=1762439951&width=1206",
+    imageUrl: mango,
     colors: "from-orange-300 to-yellow-300",
     isMember: false,
     isLimited: true,
@@ -117,7 +121,7 @@ const BEER_DATA = [
     intensity: { hops: 2, malt: 2, body: 2 },
     stats: { abv: "< 0.5%", calories: 65, carbs: "12g", ibu: 18 },
     notes: ["Lemongrass", "Citrus", "Spice"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_Seasonal_WP_12oz_Standard_071723.png?v=1762439673&width=1206",
+    imageUrl: lemongrass,
     colors: "from-lime-200 to-green-100",
     isMember: false,
     isLimited: false,
@@ -520,10 +524,10 @@ const BeerCarousel = ({ beers, onSelect, selectedId }) => {
             className={`flex-shrink-0 w-20 flex flex-col items-center gap-2 snap-start transition-all group ${selectedId === b.id ? 'opacity-100 scale-105' : 'opacity-60 hover:opacity-100'}`}
           >
           <div className={`w-16 h-20 rounded-xl flex items-center justify-center bg-slate-50 border transition-all relative overflow-hidden ${selectedId === b.id ? 'border-[#003A5D] bg-white shadow-md ring-2 ring-[#003A5D]/10' : 'border-slate-100 group-hover:border-slate-200'}`}>
-               {b.id === 'siam-crisp' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-[#003A5D] text-[8px] font-bold text-center py-0.5">NEW</div>}
+               {b.id === 'siam-crisp' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-[#003A5D] text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
                {b.id === 'athletic-plus' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">PLUS</div>}
-               {b.id === 'mango-sticky' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">PLUS</div>}
-               {b.id === 'lemongrass-wit' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">PLUS</div>}
+               {b.id === 'mango-sticky' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
+               {b.id === 'lemongrass-wit' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">EXCLUSIVE</div>}
                <img src={b.imageUrl} alt={b.name} className="w-10 h-auto object-contain" />
             </div>
             <span className={`text-[10px] font-bold text-center leading-tight line-clamp-2 w-full transition-colors ${selectedId === b.id ? 'text-[#003A5D]' : 'text-slate-400'}`}>
@@ -538,58 +542,61 @@ const BeerCarousel = ({ beers, onSelect, selectedId }) => {
 
 // --- NEW STRATEGY 2 WIDGET ---
 const SponsorshipWidget = () => (
-    <div className="bg-[#003A5D] rounded-[2rem] p-6 text-white relative overflow-hidden shadow-xl group h-full">
-        <div className="absolute top-0 right-0 p-8 bg-[#EE7623] rounded-full blur-[60px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
+    <div className="bg-white rounded-[2rem] p-6 text-[#003A5D] relative overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] group h-full border border-slate-100">
+        <div className="absolute top-0 right-0 p-8 bg-[#EE7623] rounded-full blur-[60px] opacity-10 group-hover:opacity-20 transition-opacity"></div>
         
         <div className="relative z-10 h-full flex flex-col">
             <div className="flex items-center gap-2 mb-6">
-                <div className="bg-[#EE7623] p-1.5 rounded-lg">
-                    <Medal className="text-white" size={18} />
+                <div className="bg-[#E6F4F9] p-1.5 rounded-lg">
+                    <Medal className="text-[#003A5D]" size={18} />
                 </div>
-                <h3 className="text-sm font-bold uppercase tracking-wider">Fueling Thailand</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[#003A5D]">Fueling Thailand</h3>
             </div>
             
             <div className="space-y-6 flex-grow">
                 <div>
-                    <p className="text-[10px] text-slate-300 font-bold uppercase mb-3 border-b border-white/10 pb-2">Official Celebration Partner</p>
-                    <div className="flex flex-wrap gap-2">
-                        <span className="text-xs font-bold bg-white/10 px-3 py-2 rounded-lg border border-white/10 whitespace-nowrap flex items-center gap-2">
-                            <span className="text-lg">🏃‍♂️</span> Bangsaen 42
-                        </span>
-                        <span className="text-xs font-bold bg-white/10 px-3 py-2 rounded-lg border border-white/10 whitespace-nowrap flex items-center gap-2">
-                            <span className="text-lg">🏊</span> Laguna Phuket
-                        </span>
-                        <span className="text-xs font-bold bg-white/10 px-3 py-2 rounded-lg border border-white/10 whitespace-nowrap flex items-center gap-2">
-                            <span className="text-lg">🏙️</span> Amazing Thailand
-                        </span>
+                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 border-b border-slate-100 pb-2">Official Celebration Partner</p>
+                    <div className="flex flex-col gap-2 w-full">
+                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-xs shadow-sm hover:shadow-md transition-shadow cursor-default">
+                            <span className="flex items-center gap-3"><span className="text-lg">🏃‍♂️</span> Bangsaen 42</span>
+                            <ChevronRight size={14} className="text-slate-300"/>
+                        </div>
+                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-xs shadow-sm hover:shadow-md transition-shadow cursor-default">
+                            <span className="flex items-center gap-3"><span className="text-lg">🏊</span> Laguna Phuket</span>
+                            <ChevronRight size={14} className="text-slate-300"/>
+                        </div>
+                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-xs shadow-sm hover:shadow-md transition-shadow cursor-default">
+                            <span className="flex items-center gap-3"><span className="text-lg">🏙️</span> Amazing Thailand</span>
+                            <ChevronRight size={14} className="text-slate-300"/>
+                        </div>
                     </div>
                 </div>
                 
                 <div>
-                    <p className="text-[10px] text-slate-300 font-bold uppercase mb-3 border-b border-white/10 pb-2">Proud Sponsor Of</p>
-                    <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 border-b border-slate-100 pb-2">Proud Sponsor Of</p>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
                         <div className="flex items-center justify-between mb-3">
                              <div className="flex -space-x-3">
                                 {/* Using reliable Unsplash images */}
                                 <img 
                                     src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=150&q=80" 
                                     alt="Elite Athlete" 
-                                    className="w-10 h-10 rounded-full border-2 border-[#003A5D] object-cover"
+                                    className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                 />
                                 <img 
                                     src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=150&q=80" 
                                     alt="Muay Thai" 
-                                    className="w-10 h-10 rounded-full border-2 border-[#003A5D] object-cover"
+                                    className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                 />
                                 <img 
                                     src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=150&q=80" 
                                     alt="Coach" 
-                                    className="w-10 h-10 rounded-full border-2 border-[#003A5D] object-cover"
+                                    className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                 />
                             </div>
                             <span className="text-xs font-bold text-[#EE7623]">+12 More</span>
                         </div>
-                        <p className="text-sm font-bold leading-tight">Elite Thai Athletes <span className="text-slate-400 font-normal">& Fitness Coaches</span></p>
+                        <p className="text-sm font-bold leading-tight text-[#003A5D]">Elite Thai Athletes <span className="text-slate-500 font-normal">& Fitness Coaches</span></p>
                     </div>
                 </div>
             </div>
@@ -623,23 +630,23 @@ const BrandLogo = ({ name, url, colorClass, textColorClass }) => {
 };
 
 const OfflineAvailabilityWidget = () => (
-    <div className="bg-[#003A5D] rounded-[2rem] p-6 relative overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#003A5D] group h-full">
+    <div className="bg-white rounded-[2rem] p-6 relative overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 group h-full">
         {/* Decorative background */}
-        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/5 rounded-full opacity-50 blur-2xl"></div>
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#003A5D]/5 rounded-full opacity-50 blur-2xl"></div>
         
         <div className="relative z-10 h-full flex flex-col">
             <div className="flex items-center gap-2 mb-6">
-                <div className="bg-white/10 p-1.5 rounded-lg border border-white/10">
-                    <MapPin className="text-[#EE7623]" size={18} />
+                <div className="bg-[#E6F4F9] p-1.5 rounded-lg border border-[#E6F4F9]">
+                    <MapPin className="text-[#003A5D]" size={18} />
                 </div>
-                <h3 className="text-sm font-bold uppercase tracking-wider text-white">Where to Find Us</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[#003A5D]">Where to Find Us</h3>
             </div>
             
             <div className="space-y-6 flex-grow">
                 <div>
-                    <p className="text-[10px] text-slate-300 font-bold uppercase mb-3 flex items-center gap-1 border-b border-white/10 pb-2"><Store size={12} /> Premium Retail</p>
-                    <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-white p-2 rounded-lg border border-slate-100 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Store size={12} /> Premium Retail</p>
+                    <div className="grid grid-cols-3 gap-2">
+                        <div className="bg-white p-2 rounded-lg border border-slate-200 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                             <BrandLogo 
                                 name="Gourmet Market" 
                                 url="https://logo.clearbit.com/gourmetmarketthailand.com" 
@@ -647,7 +654,7 @@ const OfflineAvailabilityWidget = () => (
                                 textColorClass="text-white"
                             />
                         </div>
-                        <div className="bg-white p-2 rounded-lg border border-slate-100 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+                        <div className="bg-white p-2 rounded-lg border border-slate-200 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                             <BrandLogo 
                                 name="Villa Market" 
                                 url="https://logo.clearbit.com/villamarket.com"
@@ -655,7 +662,7 @@ const OfflineAvailabilityWidget = () => (
                                 textColorClass="text-[#003A5D]"
                             />
                         </div>
-                        <div className="bg-white p-2 rounded-lg border border-slate-100 flex items-center justify-center shadow-sm col-span-2 hover:shadow-md transition-shadow">
+                        <div className="bg-white p-2 rounded-lg border border-slate-200 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                             <BrandLogo 
                                 name="Tops Fine Food" 
                                 url="https://logo.clearbit.com/tops.co.th" 
@@ -667,9 +674,9 @@ const OfflineAvailabilityWidget = () => (
                 </div>
                 
                 <div>
-                    <p className="text-[10px] text-slate-300 font-bold uppercase mb-3 flex items-center gap-1 border-b border-white/10 pb-2"><Dumbbell size={12} /> Exclusive Venues</p>
+                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Dumbbell size={12} /> Exclusive Venues</p>
                     <div className="grid grid-cols-3 gap-2">
-                        <div className="bg-white p-2 rounded-lg border border-slate-100 flex flex-col items-center justify-center shadow-sm text-center hover:shadow-md transition-shadow">
+                        <div className="bg-white p-2 rounded-lg border border-slate-200 flex flex-col items-center justify-center shadow-sm text-center hover:shadow-md transition-shadow">
                             <BrandLogo 
                                 name="Virgin Active" 
                                 url="https://logo.clearbit.com/virginactive.co.th" 
@@ -677,7 +684,7 @@ const OfflineAvailabilityWidget = () => (
                                 textColorClass="text-white"
                             />
                         </div>
-                        <div className="bg-white p-2 rounded-lg border border-slate-100 flex flex-col items-center justify-center shadow-sm text-center hover:shadow-md transition-shadow">
+                        <div className="bg-white p-2 rounded-lg border border-slate-200 flex flex-col items-center justify-center shadow-sm text-center hover:shadow-md transition-shadow">
                             <BrandLogo 
                                 name="Thai Country Club" 
                                 url="https://logo.clearbit.com/thaicountryclub.com" 
@@ -685,7 +692,7 @@ const OfflineAvailabilityWidget = () => (
                                 textColorClass="text-white"
                             />
                         </div>
-                        <div className="bg-white p-2 rounded-lg border border-slate-100 flex flex-col items-center justify-center shadow-sm text-center hover:shadow-md transition-shadow">
+                        <div className="bg-white p-2 rounded-lg border border-slate-200 flex flex-col items-center justify-center shadow-sm text-center hover:shadow-md transition-shadow">
                             <BrandLogo 
                                 name="WeWork" 
                                 url="https://logo.clearbit.com/wework.com" 
@@ -701,25 +708,25 @@ const OfflineAvailabilityWidget = () => (
 );
 
 const StrategicAllianceWidget = () => (
-    <div className="bg-[#003A5D] rounded-[2rem] p-6 relative overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#003A5D] group h-full">
+    <div className="bg-white rounded-[2rem] p-6 relative overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 group h-full">
         {/* Decorative background */}
-        <div className="absolute -top-10 -left-10 w-40 h-40 bg-white/5 rounded-full opacity-50 blur-2xl"></div>
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#003A5D]/5 rounded-full opacity-50 blur-2xl"></div>
         
         <div className="relative z-10 h-full flex flex-col">
             <div className="flex items-center gap-2 mb-6">
-                <div className="bg-white/10 p-1.5 rounded-lg shadow-sm border border-white/10">
-                    <Handshake className="text-[#EE7623]" size={18} />
+                <div className="bg-[#E6F4F9] p-1.5 rounded-lg shadow-sm border border-[#E6F4F9]">
+                    <Handshake className="text-[#003A5D]" size={18} />
                 </div>
-                <h3 className="text-sm font-bold uppercase tracking-wider text-white">Strategic Import Alliance</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[#003A5D]">Strategic Import Alliance</h3>
             </div>
             
             <div className="space-y-6 flex-grow">
                 <div>
-                    <p className="text-[10px] text-slate-300 font-bold uppercase mb-3 flex items-center gap-1 border-b border-white/10 pb-2"><Truck size={12} /> Craft Distributors</p>
-                    <p className="text-xs text-slate-300 mb-3 leading-relaxed">Partnering with specialized experts to ensure cold chain integrity and FDA compliance.</p>
+                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Truck size={12} /> Craft Distributors</p>
+                    <p className="text-xs text-slate-500 mb-3 leading-relaxed font-medium">Partnering with specialized experts to ensure cold chain integrity and FDA compliance.</p>
                     <div className="grid grid-cols-1 gap-2">
                         {/* Beervana */}
-                        <div className="bg-white p-3 rounded-xl border border-slate-100 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group/item">
+                        <div className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group/item">
                             <div className="flex items-center gap-3">
                                 <BrandLogo 
                                     name="Beervana" 
@@ -729,11 +736,11 @@ const StrategicAllianceWidget = () => (
                                 />
                                 <span className="text-xs font-bold text-[#003A5D]">Beervana</span>
                             </div>
-                            <div className="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center text-[10px] text-orange-600 font-bold opacity-0 group-hover/item:opacity-100 transition-opacity">→</div>
+                            <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 font-bold group-hover/item:bg-[#003A5D] group-hover/item:text-white transition-all">→</div>
                         </div>
                         
                         {/* Smiling Mad Dog */}
-                        <div className="bg-white p-3 rounded-xl border border-slate-100 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group/item">
+                        <div className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group/item">
                             <div className="flex items-center gap-3">
                                 <BrandLogo 
                                     name="Smiling Mad Dog" 
@@ -743,11 +750,11 @@ const StrategicAllianceWidget = () => (
                                 />
                                 <span className="text-xs font-bold text-[#003A5D]">Smiling Mad Dog</span>
                             </div>
-                            <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-[10px] text-blue-600 font-bold opacity-0 group-hover/item:opacity-100 transition-opacity">→</div>
+                            <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 font-bold group-hover/item:bg-[#003A5D] group-hover/item:text-white transition-all">→</div>
                         </div>
 
                         {/* Wishbeer */}
-                        <div className="bg-white p-3 rounded-xl border border-slate-100 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group/item">
+                        <div className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group/item">
                             <div className="flex items-center gap-3">
                                 <BrandLogo 
                                     name="Wishbeer" 
@@ -757,7 +764,7 @@ const StrategicAllianceWidget = () => (
                                 />
                                 <span className="text-xs font-bold text-[#003A5D]">Wishbeer</span>
                             </div>
-                            <div className="w-5 h-5 rounded-full bg-yellow-100 flex items-center justify-center text-[10px] text-yellow-600 font-bold opacity-0 group-hover/item:opacity-100 transition-opacity">→</div>
+                            <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 font-bold group-hover/item:bg-[#003A5D] group-hover/item:text-white transition-all">→</div>
                         </div>
                     </div>
                 </div>
@@ -981,7 +988,9 @@ export default function App() {
 
   // --- Handlers ---
   const handleLogin = () => {
-      setTimeout(() => { setIsLoggedIn(true); setUser({ name: "Shivam" }); }, 500);
+      const thaiNames = ["Somying", "Somchai", "Somjai", "Somsak", "Sompong", "Sommai"];
+      const randomName = thaiNames[Math.floor(Math.random() * thaiNames.length)];
+      setTimeout(() => { setIsLoggedIn(true); setUser({ name: randomName }); }, 500);
   };
   const handleLogout = () => { setIsLoggedIn(false); setUser(null); };
 
@@ -1181,13 +1190,13 @@ export default function App() {
                      <h2 className="text-[#003A5D] font-bold text-lg">Find your flavor</h2>
                  </div>
 
-                {/* UPDATED Style Selector */}
+                {/* UPDATED Style Selector - Changed to grid-cols-3 for 2 rows of 3 items */}
                 <div className="mb-8">
                     <div className="flex items-center justify-between mb-4">
                         <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Select Style</label>
                         <span className="text-[10px] bg-slate-100 text-slate-400 px-2 py-1 rounded-full font-bold">{preferences.style}</span>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-3 gap-3">
                     {STYLES_CONFIG.map((style) => {
                         const Icon = style.icon;
                         const isActive = preferences.style === style.id;
@@ -1330,13 +1339,15 @@ export default function App() {
         </div>
       </main>
 
-      <section className="max-w-7xl mx-auto w-full px-4 md:px-8 pb-12 grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-         <SponsorshipWidget />
-         <OfflineAvailabilityWidget />
-         <StrategicAllianceWidget />
-      </section>
+      <div className="w-full bg-white border-t border-slate-200 py-12 mt-12">
+        <section className="max-w-7xl mx-auto w-full px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+            <SponsorshipWidget />
+            <OfflineAvailabilityWidget />
+            <StrategicAllianceWidget />
+        </section>
+      </div>
 
-      <footer className="bg-white border-t border-slate-200 py-8 mt-auto relative z-10">
+      <footer className="bg-white border-t border-slate-200 py-8 relative z-10">
          <div className="max-w-4xl mx-auto text-center"><p className="text-[10px] text-slate-400 tracking-widest font-bold uppercase">Designed for Athletic Brewing Co Fans • <span className="text-[#003A5D]">Fit for all times</span></p></div>
       </footer>
     </div>
