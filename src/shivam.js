@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Beer, Droplet, Wheat, Award, Zap, RefreshCw, ShoppingBag, X, User, Star, Utensils, LogIn, LogOut, Trash2, ChevronRight, MapPin, CreditCard, Check, LayoutGrid, Sun, Moon, Flower2, Sparkles, Citrus, Medal, Heart, Store, Dumbbell, Briefcase, Handshake, Truck } from 'lucide-react';
 import songkran from './songkran.png';
-
 // --- CONFIGURATION ---
 const NAVY = "#003A5D"; 
 const ORANGE_SLIDER = "#EE7623"; 
@@ -11,16 +10,20 @@ const FONT_LINK = "https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;
 const apiKey = ""; // System provides key at runtime
 
 async function callGemini(prompt, isJson = false) {
+  const getMockPairing = (text) => {
+      const t = text.toLowerCase();
+      if (t.includes('siam crisp')) return "Som Tum (Green Papaya Salad) with sticky rice.";
+      if (t.includes('athletic+')) return "A post-workout protein bowl with fresh tropical fruits.";
+      if (t.includes('mango')) return "Coconut sticky rice or spicy mango salad.";
+      if (t.includes('lemongrass')) return "Tom Yum Goong (Spicy Shrimp Soup).";
+      if (t.includes('cerveza')) return "Pad Krapow Moo Saap (Holy Basil Stir-fry).";
+      if (t.includes('run wild')) return "Grilled chicken caesar salad with lemon dressing.";
+      return "A hearty burger with swiss cheese and mushrooms.";
+  };
+
   if (!apiKey || apiKey.trim() === "" || apiKey.includes("YOUR_API_KEY")) {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      if (isJson) {
-          return JSON.stringify({ 
-              id: 'run-wild', 
-              reasoning: 'Based on your request, Run Wild is the perfect match! It has the refreshing profile you are looking for.' 
-          });
-      } else {
-          return "Grilled fish tacos with a zesty lime slaw.";
-      }
+      return isJson ? JSON.stringify({ id: 'siam-crisp', reasoning: 'Siam Crisp is the perfect entry point.' }) : getMockPairing(prompt);
   }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
@@ -28,23 +31,19 @@ async function callGemini(prompt, isJson = false) {
   if (isJson) payload.generationConfig = { responseMimeType: "application/json" };
 
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     if (!response.ok) throw new Error(`API Error: ${response.status}`);
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
   } catch (error) {
     console.error("Gemini API Call Failed:", error);
-    return null;
+    return isJson ? "{}" : getMockPairing(prompt);
   }
 }
 
-// --- REAL ATHLETIC BREWING DATA (Updated with Pairings) ---
+// --- BEER DATA ---
 const BEER_DATA = [
-    {
+  {
     id: 'siam-crisp',
     name: "Siam Crisp",
     style: "Light",
@@ -58,23 +57,7 @@ const BEER_DATA = [
     isMember: false,
     isLimited: true, 
     price: 390,
-    pairings: "Som Tum (Green Papaya Salad) with sticky rice."
-  },
-  {
-    id: 'songkran-splash',
-    name: "Songkran Splash",
-    style: "Light",
-    tagline: "Songkran Splash: The Golden Ale That Washes Away Thirst",
-    description: "Dive headfirst into refreshment with Songkran Splash Golden Ale, a vibrant, easy-drinking beer inspired by Thailand's most beloved New Year's festival. Brewed to capture the joy and cooling relief of a perfect water fight, this bright golden ale pours crystal clear with a clean, white head.",
-    intensity: { hops: 2, malt: 2, body: 1 },
-    stats: { abv: "< 0.5%", calories: 40, carbs: "8g", ibu: 12 },
-    notes: ["Rice", "Crisp", "Floral"],
-    imageUrl: songkran,
-    colors: "from-yellow-200 to-amber-100",
-    isMember: false,
-    isLimited: true, 
-    price: 390,
-    pairings: "Som Tum (Green Papaya Salad) with sticky rice."
+    isMockup: true
   },
   {
     id: 'athletic-plus',
@@ -90,7 +73,7 @@ const BEER_DATA = [
     isMember: true,
     isLimited: true,
     price: 550,
-    pairings: "A post-workout protein bowl with fresh tropical fruits."
+    isMockup: true
   },
   {
     id: 'mango-sticky',
@@ -106,12 +89,12 @@ const BEER_DATA = [
     isMember: false,
     isLimited: true,
     price: 450,
-    pairings: "Coconut sticky rice or spicy mango salad."
+    isMockup: true
   },
   {
     id: 'lemongrass-wit',
     name: "Lemongrass Wit",
-    style: "Sour",
+    style: "Light",
     tagline: "Zesty Thai Botanicals",
     description: "A Belgian-style Witbier reimagined with fresh Thai lemongrass and kaffir lime leaves. incredibly aromatic and refreshing, designed to pair perfectly with spicy Thai salads.",
     intensity: { hops: 2, malt: 2, body: 2 },
@@ -122,15 +105,14 @@ const BEER_DATA = [
     isMember: false,
     isLimited: false,
     price: 420,
-    pairings: "Tom Yum Goong (Spicy Shrimp Soup)"
+    isMockup: true
   },
-  // --- IPAs ---
   {
     id: 'run-wild',
     name: "Run Wild IPA",
     style: "IPA",
     tagline: "The ultimate sessionable IPA",
-    description: "Run Wild is the ultimate sessionable IPA for craft beer lovers. Brewed with a blend of five Northwest hops, it has an approachable bitterness to balance the specialty malt body. Always refreshing and only 65 calories.",
+    description: "The 'Anchor' Product. Run Wild is the ultimate sessionable IPA for craft beer lovers. Brewed with a blend of five Northwest hops, it has an approachable bitterness.",
     intensity: { hops: 4, malt: 3, body: 3 },
     stats: { abv: "< 0.5%", calories: 65, carbs: "14g", ibu: 35 },
     notes: ["IPA", "Hoppy", "Pine"],
@@ -138,161 +120,14 @@ const BEER_DATA = [
     colors: "from-blue-700 to-blue-900",
     isMember: false,
     isLimited: false,
-    price: 450,
-    pairings: "Grilled chicken, spicy tacos, burgers"
+    price: 450 
   },
   {
-    id: 'free-wave',
-    name: "Free Wave Hazy IPA",
-    style: "IPA",
-    tagline: "Hazy, juicy, hoppy",
-    description: "Free Wave is a hugely hoppy hazy IPA with a juicy body and velvety pour. A trio of Amarillo, Citra and Mosaic hops generate bodacious aromatics of tangerine and grapefruit. Notes of pine and florals emerge in the secondary palate for an herbaceous reprieve.",
-    intensity: { hops: 5, malt: 2, body: 4 },
-    stats: { abv: "< 0.5%", calories: 70, carbs: "16g", ibu: 55 },
-    notes: ["IPA", "Citrus", "Hoppy"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/products/free-wave_9238bc1a-3bf5-4b94-b6fa-560611203b5a.png?v=1762439485&width=1206", 
-    colors: "from-orange-500 to-red-500",
-    isMember: false,
-    isLimited: false,
-    price: 480,
-    pairings: "Pizza, curry, spicy wings"
-  },
-  {
-    id: 'hometown-harvest',
-    name: "Hometown Harvest",
-    style: "IPA",
-    tagline: "Festive IPA",
-    description: "A toast to each of our coasts! Hometown Harvest is a malt-forward IPA featuring malts from the East Coast (Connecticut) and hops from the West Coast (Oregon). This clear, dark amber brew features lightly sweet and moderately bitter notes.",
-    intensity: { hops: 4, malt: 4, body: 3 },
-    stats: { abv: "< 0.5%", calories: 80, carbs: "17g", ibu: 40 },
-    notes: ["IPA", "Hoppy", "Malt"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_Pilot_HomeTownHarvest_Website_100323_5ca9823f-7267-451e-830e-fbc40ca92a9e.png?v=1761959456&width=1206",
-    colors: "from-amber-700 to-orange-800",
-    isMember: true,
-    isLimited: true,
-    price: 510,
-    pairings: "Roast turkey, stuffing, cranberry sauce"
-  },
-  {
-    id: 'triple-palm',
-    name: "Triple Palm",
-    style: "IPA",
-    tagline: "Tropical IPA",
-    description: "Triple Palm is a tropical, triple-hopped IPA that's highly refreshing and bold in flavour. It's crafted with three types of hops added at three stages of the brewing process to create a blend of tropical fruity notes including mango, guava, lychee, citrus, honey, rose, and stone fruit.",
-    intensity: { hops: 5, malt: 2, body: 3 },
-    stats: { abv: "< 0.5%", calories: 75, carbs: "16g", ibu: 45 },
-    notes: ["IPA", "Hoppy", "Tropical"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_275ba9d0-774e-47d2-a95a-8c7275f60020.png?v=1762439951&width=1206",
-    colors: "from-teal-400 to-green-600",
-    isMember: true,
-    isLimited: true,
-    price: 495,
-    pairings: "Ceviche, grilled shrimp, mango salsa"
-  },
-  {
-    id: 'fruity-free-wave',
-    name: "Fruity Free Wave",
-    style: "IPA",
-    tagline: "Juicy hazy IPA",
-    description: "This special-edition hazy IPA builds on the classic Free Wave recipe, bringing together Amarillo, Citra, and Mosaic hops with vibrant layers of mango and passion fruit. The result is a juicy pour bursting with citrus aromas and tropical character.",
-    intensity: { hops: 4, malt: 2, body: 4 },
-    stats: { abv: "< 0.5%", calories: 75, carbs: "17g", ibu: 50 },
-    notes: ["IPA", "Juicy", "Tropical"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_Pilot_FruityFreeWave_12oz_WEBSITE_111125.png?v=1762981053&width=1206",
-    colors: "from-orange-400 to-pink-500",
-    isMember: true,
-    isLimited: true,
-    price: 515,
-    pairings: "Fish tacos, fruit salad, coconut shrimp"
-  },
-  {
-    id: 'tuckers-west-coast',
-    name: "Tucker's West Coast IPA",
-    style: "IPA",
-    tagline: "Classic West Coast",
-    description: "A classic West Coast style IPA, this brew is balanced with notes of citrus, pine, and tropical fruit. Its subtle malt character meshes flawlessly with a hoppy punch, making this expertly crafted brew a go-to for whenever we're jonesing for some Pacific vibes.",
-    intensity: { hops: 5, malt: 3, body: 3 },
-    stats: { abv: "< 0.5%", calories: 70, carbs: "15g", ibu: 60 },
-    notes: ["IPA", "Hoppy", "Pine"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_LTO_Tuckers_12oz_Standard_022723.png?v=1762439550&width=1206",
-    colors: "from-green-600 to-emerald-800",
-    isMember: true,
-    isLimited: true,
-    price: 475,
-    pairings: "Sharp cheddar, BBQ ribs, burgers"
-  },
-  {
-    id: 'ready-front',
-    name: "Ready Front",
-    style: "IPA",
-    tagline: "Veteran's brew",
-    description: "Brewed with a team of veterans, Ready Front is a collaboration brew intended to give thanks and give back to those who served for our freedoms. The hops are from Yakima Chief Hops who donate a percent of the sale of the Veteran's Blend.",
-    intensity: { hops: 4, malt: 3, body: 3 },
-    stats: { abv: "< 0.5%", calories: 70, carbs: "14g", ibu: 40 },
-    notes: ["IPA", "Pine", "Citrus"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_6_94cbb89b-a2af-46ed-a1b5-fc3b4b1963c5.png?v=1760041088&width=1206",
-    colors: "from-slate-600 to-slate-800",
-    isMember: true,
-    isLimited: true,
-    price: 460,
-    pairings: "Steak, hearty stews, grilled vegetables"
-  },
-  {
-    id: 'side-stage',
-    name: "Side Stage",
-    style: "IPA",
-    tagline: "Hoppy pale",
-    description: "Side Stage celebrates its 30 years with crisp golden hops, aromas of sweet citrus, and lively florals. Golden hops and real orange peel bring sweet-citrus brightness and lively floral aromas on a refreshingly light body.",
-    intensity: { hops: 3, malt: 2, body: 2 },
-    stats: { abv: "< 0.5%", calories: 60, carbs: "14g", ibu: 30 },
-    notes: ["Pale Ale", "Citrus", "Floral"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_dd332c48-b148-4b86-8e77-4e43c9b26145.png?v=1761744450&width=1206",
-    colors: "from-yellow-500 to-orange-500",
-    isMember: true,
-    isLimited: true,
-    price: 440,
-    pairings: "Grilled chicken salad, light pasta, seafood"
-  },
-
-  // --- LIGHT ---
-  {
-    id: 'upside-dawn',
-    name: "Upside Dawn Golden",
+    id: 'cerveza',
+    name: "Cerveza Atletica",
     style: "Light",
-    tagline: "Classic golden ale",
-    description: "Classic craft Golden style. Refreshing, clean, balanced, and light-bodied. Aromas subtle with floral and earthy notes. Brewed with premium organic malts from US & Germany along with combo of English and traditional American hops.",
-    intensity: { hops: 2, malt: 2, body: 2 },
-    stats: { abv: "< 0.5%", calories: 45, carbs: "10g", ibu: 15 },
-    notes: ["Golden", "Pale", "Honey"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/upside-usa_4f73bf57-c9fd-4191-9b17-7f071aaecaf1.png?v=1762439479&width=1206",
-    colors: "from-yellow-400 to-yellow-500",
-    isMember: false,
-    isLimited: false,
-    price: 450,
-    pairings: "Salads, grilled chicken, seafood"
-  },
-  {
-    id: 'athletic-lite',
-    name: "Athletic Lite",
-    style: "Light",
-    tagline: "Sport of life",
-    description: "Athletic Lite is a light brew, completely reimagined. It's classically simple but expertly crafted with 25 calories, 5 carbs, and organic grains. We brewed it specifically for the sport of life and all the good times that come with it.",
-    intensity: { hops: 1, malt: 2, body: 1 },
-    stats: { abv: "< 0.5%", calories: 25, carbs: "5g", ibu: 20 },
-    notes: ["Light", "Malt", "Refreshing"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_1c8705ba-2e0f-430d-b8e5-193c462c8c60.png?v=1762439849&width=1206",
-    colors: "from-slate-100 to-white",
-    isMember: false,
-    isLimited: false,
-    price: 425,
-    pairings: "Light salads, sushi, grilled fish"
-  },
-  {
-    id: 'atletica',
-    name: "Atlética",
-    style: "Light",
-    tagline: "Mexican-style copper",
-    description: "Atlética is a refreshingly bright take on a Mexican-style copper. Using the finest Munich malts, it boasts a lightly toasted malt character with a whisper of spicy florals before rolling into smooth and lightly sweet waves of bread crust and wheat.",
+    tagline: "Mexican-style Copper",
+    description: "A refreshing Mexican-style copper lager. Its clean, crisp profile makes it the ultimate companion for spicy Thai dishes like Pad Krapow.",
     intensity: { hops: 2, malt: 3, body: 3 },
     stats: { abv: "< 0.5%", calories: 60, carbs: "12g", ibu: 15 },
     notes: ["Copper", "Bread", "Malt"],
@@ -300,33 +135,29 @@ const BEER_DATA = [
     colors: "from-amber-600 to-orange-700",
     isMember: false,
     isLimited: false,
-    price: 430,
-    pairings: "Tacos, nachos, spicy food"
+    price: 450
   },
   {
-    id: 'wits-peak',
-    name: "Wit's Peak",
-    style: "Light",
-    tagline: "Belgian-style white",
-    description: "Wit's Peak is a lively and luminous non-alcoholic Belgian-style White with ingredients that pay homage to the Old World style. It's built upon classic flavors of wheat and malt interwoven with exotic spices and citrus peel.",
-    intensity: { hops: 2, malt: 2, body: 3 },
-    stats: { abv: "< 0.5%", calories: 65, carbs: "13g", ibu: 15 },
-    notes: ["Wheat", "Spice", "Citrus"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_Seasonal_WP_12oz_Standard_071723.png?v=1762439673&width=1206",
-    colors: "from-yellow-100 to-blue-100",
+    id: 'free-wave',
+    name: "Free Wave Hazy IPA",
+    style: "IPA",
+    tagline: "Hazy, juicy, hoppy",
+    description: "Free Wave is a hugely hoppy hazy IPA with a juicy body and velvety pour. A trio of Amarillo, Citra and Mosaic hops generate bodacious aromatics.",
+    intensity: { hops: 5, malt: 2, body: 4 },
+    stats: { abv: "< 0.5%", calories: 70, carbs: "16g", ibu: 55 },
+    notes: ["IPA", "Citrus", "Hoppy"],
+    imageUrl: "https://athleticbrewing.com/cdn/shop/products/free-wave_9238bc1a-3bf5-4b94-b6fa-560611203b5a.png?v=1762439485&width=1206", 
+    colors: "from-orange-500 to-red-500",
     isMember: false,
-    isLimited: true,
-    price: 465,
-    pairings: "Mussels, fries, salads"
+    isLimited: false,
+    price: 480
   },
-
-  // --- DARK ---
   {
     id: 'all-out',
     name: "All Out Extra Dark",
     style: "Dark",
     tagline: "Smooth & soul warming",
-    description: "Inspired by days on the slopes and nights by the fire, All Out is a delightfully smooth and soul-warming stout. Each sip delivers a silky, full-bodied mouthfeel and pleasantly toasty finish, along with delicate notes of coffee and bittersweet chocolate.",
+    description: "Inspired by days on the slopes and nights by the fire, All Out is a delightfully smooth and soul-warming stout. Each sip delivers a silky, full-bodied mouthfeel.",
     intensity: { hops: 2, malt: 5, body: 5 },
     stats: { abv: "< 0.5%", calories: 90, carbs: "18g", ibu: 10 },
     notes: ["Dark", "Coffee", "Malt"],
@@ -334,115 +165,20 @@ const BEER_DATA = [
     colors: "from-neutral-900 to-slate-800",
     isMember: false,
     isLimited: false,
-    price: 480,
-    pairings: "Chocolate cake, BBQ, hearty stews"
+    price: 480
   },
-  {
-    id: 'winter-wonder',
-    name: "Winter Wonder",
-    style: "Dark",
-    tagline: "Holiday brew",
-    description: "A light amber brew that captures the season with warming notes of spice, mulled apple, and orange peel. Hints of cinnamon and cardamom blend with subtle hops resulting in a smooth profile built for colder months.",
-    intensity: { hops: 2, malt: 5, body: 4 },
-    stats: { abv: "< 0.5%", calories: 80, carbs: "16g", ibu: 25 },
-    notes: ["Amber", "Spice", "Holiday"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_1_d1d5586a-6f19-4f60-a958-8bb88a6ba040.png?v=1763736779&width=1206",
-    colors: "from-red-800 to-red-950",
-    isMember: true,
-    isLimited: true,
-    price: 500,
-    pairings: "Roast pork, gingerbread, apple pie"
-  },
-  {
-    id: 'first-ride',
-    name: "First Ride",
-    style: "Dark",
-    tagline: "Coffee porter",
-    description: "First Ride is an extra dark brew with tremendous depth and nuance. It offers a malt-forward palate that's bold yet crisp, nutty aromatics, and a clean, dry finish. A double-dose of coffee roasts, both medium and dark, burst out of the glass.",
-    intensity: { hops: 2, malt: 5, body: 4 },
-    stats: { abv: "< 0.5%", calories: 85, carbs: "17g", ibu: 20 },
-    notes: ["Dark", "Coffee", "Malt"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_LTO_FirstRide_12oz_WebStandard_081423.png?v=1762439665&width=1206",
-    colors: "from-stone-800 to-black",
-    isMember: true,
-    isLimited: true,
-    price: 490,
-    pairings: "Steak, grilled meats, chocolate"
-  },
-  {
-    id: 'stump-jump',
-    name: "Stump Jump",
-    style: "Dark",
-    tagline: "Autumn brown",
-    description: "Stump Jump is a smooth and spirited Autumn Brown with bounding flavour and exceptional balance. Toasty and nutty notes hit a harmony alongside aromas of roasted caramel, while a medium body and crisp finish create structure and surprise.",
-    intensity: { hops: 2, malt: 4, body: 3 },
-    stats: { abv: "< 0.5%", calories: 75, carbs: "15g", ibu: 25 },
-    notes: ["Brown", "Malt", "Caramel"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_5_4234d08e-bbeb-4576-b940-3d7bec818b0f.png?v=1759155826&width=1206",
-    colors: "from-amber-900 to-orange-950",
-    isMember: true,
-    isLimited: true,
-    price: 470,
-    pairings: "Roast beef, nutty desserts, burgers"
-  },
-
-  // --- SOUR ---
-  {
-    id: 'tropical-sour',
-    name: "Tropical Sour",
-    style: "Sour",
-    tagline: "Tart & refreshing",
-    description: "Tropical Sour is a vibrant and tangy escape to a land of pure paradise. This brew is part of our Fruit Stand Series, and filled with bright and pungent aromatics of passion fruit, mango and lush tropical flowers. It features a light-bodied profile that's crisp and tart.",
-    intensity: { hops: 1, malt: 2, body: 2 },
-    stats: { abv: "< 0.5%", calories: 65, carbs: "13g", ibu: 10 },
-    notes: ["Sour", "Tropical", "Fruit"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_555b2c1a-26df-4f1b-85fb-334c727c4be0.png?v=1762439743&width=1206",
-    colors: "from-pink-400 to-yellow-300",
-    isMember: true,
-    isLimited: true,
-    price: 485,
-    pairings: "Fruit salad, light cheeses, grilled fish"
-  },
-  {
-    id: 'blackberry-berliner',
-    name: "Blackberry Berliner Weisse",
-    style: "Sour",
-    tagline: "Bursting with berries",
-    description: "This Blackberry Berliner Weisse is bursting with berries. Expect a tart punch of blackberry that compliments the soft wheat body of this German-style Sour. This brew is part of our Fruit Stand Series, bringing together explosions of fruit and tart goodness all summer long!",
-    intensity: { hops: 1, malt: 2, body: 2 },
-    stats: { abv: "< 0.5%", calories: 60, carbs: "12g", ibu: 5 },
-    notes: ["Sour", "Blackberry", "Tart"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/main-pdp-image_e2b653cb-93c1-4bab-87cf-7bc24b287c1f.png?v=1762439549&width=1206",
-    colors: "from-purple-600 to-fuchsia-400",
-    isMember: true,
-    isLimited: true,
-    price: 495,
-    pairings: "Cheesecake, salads, goat cheese"
-  },
-  {
-    id: 'dill-dreams',
-    name: "Dill Dreams",
-    style: "Sour",
-    tagline: "Pickle-inspired brew",
-    description: "Surprisingly dill-ightful! This brew brings the essence of a classic dill pickle straight to your glass. Crafted with cucumber concentrate, Himalayan salt, dill seed, coriander, and a medley of traditional pickling spices, this brew is briny, tart, and boldly herbaceous.",
-    intensity: { hops: 1, malt: 2, body: 2 },
-    stats: { abv: "< 0.5%", calories: 50, carbs: "11g", ibu: 8 },
-    notes: ["Pickle", "Dill", "Salty"],
-    imageUrl: "https://athleticbrewing.com/cdn/shop/files/USA_Pilot_DillDreams_12oz_WEBSITE_071025.png?v=1762440180&width=1206",
-    colors: "from-green-400 to-emerald-300",
-    isMember: true,
-    isLimited: true,
-    price: 520,
-    pairings: "Burgers, hot dogs, fried foods"
-  }
 ];
-
-// --- HELPER FUNCTIONS ---
 
 const findMatch = (preferences) => {
   const { hops, malt, body, style } = preferences;
   let candidates = BEER_DATA;
-  if (style !== 'All') candidates = BEER_DATA.filter(b => b.style === style);
+  if (style !== 'All') {
+      if (style === 'Functional') {
+          candidates = BEER_DATA.filter(b => b.style === 'Functional');
+      } else {
+          candidates = BEER_DATA.filter(b => b.style === style);
+      }
+  }
   if (candidates.length === 0) candidates = BEER_DATA;
   const scoredBeers = candidates.map(beer => {
     const hopDiff = Math.abs(hops - beer.intensity.hops);
@@ -465,7 +201,6 @@ const getGreeting = () => {
     if (hour < 18) return "Good Afternoon";
     return "Good Evening";
 };
-
 
 // --- COMPONENTS ---
 
@@ -498,43 +233,34 @@ const Slider = ({ label, value, onChange, icon: Icon, colorClass }) => {
   );
 };
 
-const BeerCarousel = ({ beers, onSelect, selectedId }) => {
-  // UseMemo to stabilize the random selection so it doesn't change on every render
-  const randomSelection = useMemo(() => {
-    // Shuffle copy of beers and take 6
-    const shuffled = [...beers].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 6);
-  }, []); // Empty dependency array means this runs once on mount (per component instance)
-
-  return (
-    <div className="mt-8 border-t-2 border-slate-100 pt-6">
-      <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Explore the Lineup</h3>
-          <span className="text-[10px] text-slate-300 font-medium">Random Selection</span>
-      </div>
-<div className="flex gap-3 overflow-x-auto pb-4 snap-x hide-scrollbar px-1 pt-1" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
-        {randomSelection.map((b) => (
-          <button
-            key={b.id}
-            onClick={() => onSelect(b)}
-            className={`flex-shrink-0 w-20 flex flex-col items-center gap-2 snap-start transition-all group ${selectedId === b.id ? 'opacity-100 scale-105' : 'opacity-60 hover:opacity-100'}`}
-          >
-          <div className={`w-16 h-20 rounded-xl flex items-center justify-center bg-slate-50 border transition-all relative overflow-hidden ${selectedId === b.id ? 'border-[#003A5D] bg-white shadow-md ring-2 ring-[#003A5D]/10' : 'border-slate-100 group-hover:border-slate-200'}`}>
-               {b.id === 'siam-crisp' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-[#003A5D] text-[8px] font-bold text-center py-0.5">NEW</div>}
-               {b.id === 'athletic-plus' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">PLUS</div>}
-               {b.id === 'mango-sticky' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">PLUS</div>}
-               {b.id === 'lemongrass-wit' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">PLUS</div>}
-               <img src={b.imageUrl} alt={b.name} className="w-10 h-auto object-contain" />
-            </div>
-            <span className={`text-[10px] font-bold text-center leading-tight line-clamp-2 w-full transition-colors ${selectedId === b.id ? 'text-[#003A5D]' : 'text-slate-400'}`}>
-                {b.name}
-            </span>
-          </button>
-        ))}
-      </div>
+const BeerCarousel = ({ beers, onSelect, selectedId }) => (
+  <div className="mt-8 border-t border-slate-100 pt-6">
+    <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Explore the Lineup</h3>
+        <span className="text-[10px] text-slate-300 font-medium">Scroll for more →</span>
     </div>
-  );
-};
+    <div className="flex gap-3 overflow-x-auto pb-4 snap-x hide-scrollbar" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
+      {beers.map((b) => (
+        <button
+          key={b.id}
+          onClick={() => onSelect(b)}
+          className={`flex-shrink-0 w-24 flex flex-col items-center gap-2 snap-start transition-all group ${selectedId === b.id ? 'opacity-100 scale-105' : 'opacity-60 hover:opacity-100'}`}
+        >
+          <div className={`w-20 h-24 rounded-xl flex items-center justify-center bg-slate-50 border transition-all relative overflow-hidden ${selectedId === b.id ? 'border-[#003A5D] bg-white shadow-md ring-2 ring-[#003A5D]/10' : 'border-slate-100 group-hover:border-slate-200'}`}>
+             {/* Strategy Highlight */}
+             {b.id === 'siam-crisp' && <div className="absolute top-0 left-0 w-full bg-[#ebd923] text-[#003A5D] text-[8px] font-bold text-center py-0.5">NEW</div>}
+             {b.id === 'athletic-plus' && <div className="absolute top-0 left-0 w-full bg-teal-400 text-white text-[8px] font-bold text-center py-0.5">PLUS</div>}
+             
+             <img src={b.imageUrl} alt={b.name} className="w-12 h-auto object-contain" />
+          </div>
+          <span className={`text-[10px] font-bold text-center leading-tight line-clamp-2 w-full transition-colors ${selectedId === b.id ? 'text-[#003A5D]' : 'text-slate-400'}`}>
+              {b.name}
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+);
 
 // --- NEW STRATEGY 2 WIDGET ---
 const SponsorshipWidget = () => (
@@ -768,7 +494,7 @@ const StrategicAllianceWidget = () => (
 
 const CanImage = ({ beer }) => {
     return (
-      <div className="w-32 sm:w-40 md:w-56 mx-auto relative z-10 filter drop-shadow-2xl transition-transform duration-500 hover:scale-105 group">
+      <div className="w-40 md:w-56 mx-auto relative z-10 filter drop-shadow-2xl transition-transform duration-500 hover:scale-105 group">
          <div className="relative">
             <img src={beer.imageUrl} alt={beer.name} className="w-full h-auto object-contain relative z-10" />
          </div>
@@ -862,15 +588,15 @@ const CheckoutModal = ({ isOpen, onClose, cartItems, onSubmitOrder }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center md:p-4">
+        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose}></div>
-            <div className="bg-white w-full md:max-w-2xl md:rounded-[2rem] shadow-2xl relative z-10 overflow-hidden flex flex-col h-full md:h-auto md:max-h-[90vh]">
-                <div className="p-4 md:p-6 bg-[#003A5D] text-white flex justify-between items-center shrink-0">
+            <div className="bg-white w-full max-w-2xl rounded-[2rem] shadow-2xl relative z-10 overflow-hidden flex flex-col max-h-[90vh]">
+                <div className="p-6 bg-[#003A5D] text-white flex justify-between items-center shrink-0">
                     <h2 className="text-xl font-bold font-['Barlow']">Secure Checkout</h2>
                     <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full"><X size={20} /></button>
                 </div>
                 
-                <div className="overflow-y-auto p-6 md:p-8 flex-1">
+                <div className="overflow-y-auto p-8">
                     <form id="checkout-form" onSubmit={handleSubmit} className="space-y-6">
                         {/* Section 1: Contact */}
                         <div>
@@ -976,6 +702,7 @@ export default function App() {
     link.href = FONT_LINK;
     link.rel = 'stylesheet';
     document.head.appendChild(link);
+    // Initialize with the new strategy product to highlight it
     setBeer(BEER_DATA[0]);
   }, []);
 
@@ -985,7 +712,41 @@ export default function App() {
   };
   const handleLogout = () => { setIsLoggedIn(false); setUser(null); };
 
-  const handleStyleChange = (newStyle) => setPreferences(prev => ({ ...prev, style: newStyle }));
+  const handleStyleChange = (newStyle) => {
+    // 1. Update Style
+    const newPreferences = { ...preferences, style: newStyle };
+
+    // 2. Preset Sliders based on Style
+    switch (newStyle) {
+        case 'IPA':
+            newPreferences.hops = 5;
+            newPreferences.malt = 3;
+            newPreferences.body = 3;
+            break;
+        case 'Light':
+            newPreferences.hops = 2;
+            newPreferences.malt = 2;
+            newPreferences.body = 1;
+            break;
+        case 'Dark':
+            newPreferences.hops = 2;
+            newPreferences.malt = 5;
+            newPreferences.body = 4;
+            break;
+        case 'Functional':
+            newPreferences.hops = 2;
+            newPreferences.malt = 2;
+            newPreferences.body = 2;
+            break;
+        default: // All
+            newPreferences.hops = 3;
+            newPreferences.malt = 3;
+            newPreferences.body = 3;
+            break;
+    }
+    
+    setPreferences(newPreferences);
+  };
 
   const handleFindMatch = () => {
     setIsAnimating(true);
@@ -1014,7 +775,7 @@ export default function App() {
       setPairingSuggestion(null);
       // Reverse Sync: Update sliders to match the selected beer's profile
       setPreferences({
-          style: 'All', // Reset style filter to 'All' so users know they are in manual mode OR we could set it to beer.style
+          style: 'All', // Reset style filter to 'All'
           hops: selectedBeer.intensity.hops,
           malt: selectedBeer.intensity.malt,
           body: selectedBeer.intensity.body
@@ -1024,16 +785,6 @@ export default function App() {
   const handleGetPairing = async () => {
       if (!beer) return;
       setPairingLoading(true);
-      
-      // Use static data first if available (mimicking the "drink_it_with" class data)
-      if (beer.pairings) {
-          await new Promise(resolve => setTimeout(resolve, 500)); // Fake network delay for effect
-          setPairingSuggestion(beer.pairings);
-          setPairingLoading(false);
-          return;
-      }
-
-      // Fallback to Gemini if no static pairing exists
       const prompt = `Suggest one specific food pairing for ${beer.name}. concise (under 20 words).`;
       const result = await callGemini(prompt, false);
       setPairingSuggestion(result);
@@ -1075,13 +826,12 @@ export default function App() {
   };
 
   // --- STYLES CONFIG FOR FILTER ---
+  // Added "Functional" style for the new strategy
   const STYLES_CONFIG = [
       { id: 'All', label: 'All Brews', icon: LayoutGrid },
       { id: 'IPA', label: 'IPA Series', icon: Flower2 },
       { id: 'Light', label: 'Light Brews', icon: Sun },
-      { id: 'Dark', label: 'Dark Roasts', icon: Moon },
-      { id: 'Sour', label: 'Sour', icon: Citrus },
-      { id: 'Functional', label: 'Athletic+', icon: Sparkles }
+      { id: 'Functional', label: 'Athletic+', icon: Sparkles }, // New Category
   ];
 
   return (
@@ -1160,19 +910,18 @@ export default function App() {
                     className="flex items-center gap-2 text-xs font-bold text-white bg-[#003A5D] px-4 py-2 rounded-full hover:bg-[#002a44] transition-colors"
                  >
                      <LogIn size={14} />
-                     <span className="hidden sm:inline">Login</span>
+                     Login
                  </button>
              )}
           </div>
         </div>
       </header>
 
-      {/* Main Container: Switched to flex-col-reverse on mobile so Result appears ABOVE Controls */}
-      <main className="flex-grow max-w-7xl mx-auto w-full p-4 md:p-8 flex flex-col lg:grid lg:grid-cols-12 gap-4 md:gap-8 items-start relative z-10">
+      <main className="flex-grow max-w-7xl mx-auto w-full p-4 md:p-8 grid lg:grid-cols-12 gap-8 items-start relative z-10">
         
         {/* LEFT COLUMN: CONTROLS */}
-        <div className="lg:col-span-4 w-full space-y-6 animate-fade-in-up">
-          <div className="bg-white/90 backdrop-blur rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white overflow-hidden p-6 md:p-8">
+        <div className="lg:col-span-4 space-y-6 animate-fade-in-up">
+          <div className="bg-white/90 backdrop-blur rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white overflow-hidden p-8">
              <div className="animate-fade-in">
                  <div className="flex items-center gap-3 mb-6">
                      <div className="bg-[#E6F4F9] p-2 rounded-full">
@@ -1242,7 +991,7 @@ export default function App() {
         </div>
 
         {/* RIGHT COLUMN: PREVIEW */}
-        <div className="lg:col-span-8 w-full flex flex-col items-center justify-center relative min-h-[400px] md:min-h-[500px]">
+        <div className="lg:col-span-8 flex flex-col items-center justify-center relative min-h-[500px]">
             {isAnimating && (
               <div className="absolute inset-0 z-30 bg-white/60 backdrop-blur-md flex items-center justify-center rounded-[2.5rem]">
                 <div className="flex flex-col items-center animate-bounce">
@@ -1256,7 +1005,7 @@ export default function App() {
               <div className="w-full grid md:grid-cols-2 gap-0 bg-white rounded-[2.5rem] shadow-[0_20px_40px_rgb(0,0,0,0.08)] overflow-hidden border border-white transform transition-all duration-500 hover:shadow-[0_25px_50px_rgb(0,0,0,0.12)]">
                 
                 {/* Product Image Section */}
-                <div className="relative bg-[#F8F9FB] h-72 min-h-[18rem] md:h-auto flex items-center justify-center p-6 md:p-8 overflow-hidden group">
+                <div className="relative bg-[#F8F9FB] h-[400px] md:h-auto flex items-center justify-center p-8 overflow-hidden group">
                      {/* Immersive Background */}
                      <div className="absolute inset-0 z-0 opacity-20 transform scale-150 blur-xl" style={{ backgroundImage: `url(${beer.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(40px) saturate(200%)' }}></div>
                      <div className={`absolute w-96 h-96 rounded-full bg-gradient-to-tr ${beer.colors} opacity-20 blur-3xl transform group-hover:scale-110 transition-transform duration-700 z-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}></div>
@@ -1270,17 +1019,17 @@ export default function App() {
                 </div>
 
                 {/* Details Section */}
-                <div className="p-6 md:p-10 flex flex-col justify-between relative bg-white/50 backdrop-blur-sm">
+                <div className="p-8 md:p-10 flex flex-col justify-between relative bg-white/50 backdrop-blur-sm">
                   <div>
                     <div className="flex justify-between items-start mb-4">
                         <span className="text-xs font-bold text-slate-400 border-b-2 border-[#ebd923] pb-1 uppercase tracking-wider">{beer.style}</span>
                         {beer.stats.ibu > 40 && <span className="text-[10px] font-bold text-[#003A5D] bg-[#A2D9E7] px-3 py-1 rounded-full">Hoppy</span>}
                     </div>
                     <div className="flex justify-between items-start">
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#003A5D] leading-[0.9] mb-2">{beer.name}</h2>
-                        <div className="text-right shrink-0 ml-4">
-                             <p className="text-[#003A5D] font-bold text-lg md:text-xl whitespace-nowrap">฿{beer.price}</p>
-                             <p className="text-xs text-slate-400 whitespace-nowrap">per 6-pack</p>
+                        <h2 className="text-4xl font-extrabold text-[#003A5D] leading-[0.9] mb-2">{beer.name}</h2>
+                        <div className="text-right">
+                             <p className="text-[#003A5D] font-bold text-xl">฿{beer.price}</p>
+                             <p className="text-xs text-slate-400">per 6-pack</p>
                         </div>
                     </div>
                     <h3 className="text-sm font-semibold text-slate-500 mb-4 uppercase tracking-wide">{beer.tagline}</h3>
@@ -1330,6 +1079,7 @@ export default function App() {
         </div>
       </main>
 
+      {/* New Bottom Section */}
       <section className="max-w-7xl mx-auto w-full px-4 md:px-8 pb-12 grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
          <SponsorshipWidget />
          <OfflineAvailabilityWidget />
