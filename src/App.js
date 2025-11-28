@@ -555,17 +555,17 @@ const SponsorshipWidget = () => (
             
             <div className="space-y-6 flex-grow">
                 <div>
-                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 border-b border-slate-100 pb-2">Official Celebration Partner</p>
+                    <p className="text-sm text-slate-500 font-bold uppercase mb-3 border-b border-slate-100 pb-2">Official Celebration Partner</p>
                     <div className="flex flex-col gap-2 w-full">
-                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-xs shadow-sm hover:shadow-md transition-shadow cursor-default">
+                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-sm shadow-sm hover:shadow-md transition-shadow cursor-default">
                             <span className="flex items-center gap-3"><span className="text-lg">🏃‍♂️</span> Bangsaen 42</span>
                             <ChevronRight size={14} className="text-slate-300"/>
                         </div>
-                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-xs shadow-sm hover:shadow-md transition-shadow cursor-default">
+                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-sm shadow-sm hover:shadow-md transition-shadow cursor-default">
                             <span className="flex items-center gap-3"><span className="text-lg">🏊</span> Laguna Phuket</span>
                             <ChevronRight size={14} className="text-slate-300"/>
                         </div>
-                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-xs shadow-sm hover:shadow-md transition-shadow cursor-default">
+                        <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 text-[#003A5D] font-bold text-sm shadow-sm hover:shadow-md transition-shadow cursor-default">
                             <span className="flex items-center gap-3"><span className="text-lg">🏙️</span> Amazing Thailand</span>
                             <ChevronRight size={14} className="text-slate-300"/>
                         </div>
@@ -573,7 +573,7 @@ const SponsorshipWidget = () => (
                 </div>
                 
                 <div>
-                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 border-b border-slate-100 pb-2">Proud Sponsor Of</p>
+                    <p className="text-sm text-slate-500 font-bold uppercase mb-3 border-b border-slate-100 pb-2">Proud Sponsor Of</p>
                     <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
                         <div className="flex items-center justify-between mb-3">
                              <div className="flex -space-x-3">
@@ -594,7 +594,7 @@ const SponsorshipWidget = () => (
                                     className="w-10 h-10 rounded-full border-2 border-white object-cover"
                                 />
                             </div>
-                            <span className="text-xs font-bold text-[#EE7623]">+12 More</span>
+                            <span className="text-sm font-bold text-[#EE7623]">+12 More</span>
                         </div>
                         <p className="text-sm font-bold leading-tight text-[#003A5D]">Elite Thai Athletes <span className="text-slate-500 font-normal">& Fitness Coaches</span></p>
                     </div>
@@ -644,7 +644,7 @@ const OfflineAvailabilityWidget = () => (
             
             <div className="space-y-6 flex-grow">
                 <div>
-                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Store size={12} /> Premium Retail</p>
+                    <p className="text-sm text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Store size={12} /> Premium Retail</p>
                     <div className="grid grid-cols-3 gap-2">
                         <div className="bg-white p-2 rounded-lg border border-slate-200 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                             <BrandLogo 
@@ -674,7 +674,7 @@ const OfflineAvailabilityWidget = () => (
                 </div>
                 
                 <div>
-                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Dumbbell size={12} /> Exclusive Venues</p>
+                    <p className="text-sm text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Dumbbell size={12} /> Exclusive Venues</p>
                     <div className="grid grid-cols-3 gap-2">
                         <div className="bg-white p-2 rounded-lg border border-slate-200 flex flex-col items-center justify-center shadow-sm text-center hover:shadow-md transition-shadow">
                             <BrandLogo 
@@ -722,8 +722,8 @@ const StrategicAllianceWidget = () => (
             
             <div className="space-y-6 flex-grow">
                 <div>
-                    <p className="text-xs text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Truck size={12} /> Craft Distributors</p>
-                    <p className="text-xs text-slate-500 mb-3 leading-relaxed font-medium">Partnering with specialized experts to ensure cold chain integrity and FDA compliance.</p>
+                    <p className="text-sm text-slate-500 font-bold uppercase mb-3 flex items-center gap-1 border-b border-slate-100 pb-2"><Truck size={12} /> Craft Distributors</p>
+                    <p className="text-sm text-slate-500 mb-3 leading-relaxed font-medium">Partnering with specialized experts to ensure cold chain integrity and FDA compliance.</p>
                     <div className="grid grid-cols-1 gap-2">
                         {/* Beervana */}
                         <div className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow group/item">
@@ -734,7 +734,7 @@ const StrategicAllianceWidget = () => (
                                     colorClass="bg-orange-500"
                                     textColorClass="text-white"
                                 />
-                                <span className="text-xs font-bold text-[#003A5D]">Beervana</span>
+                                <span className="text-sm font-bold text-[#003A5D]">Beervana</span>
                             </div>
                             <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 font-bold group-hover/item:bg-[#003A5D] group-hover/item:text-white transition-all">→</div>
                         </div>
@@ -748,7 +748,7 @@ const StrategicAllianceWidget = () => (
                                     colorClass="bg-blue-600"
                                     textColorClass="text-white"
                                 />
-                                <span className="text-xs font-bold text-[#003A5D]">Smiling Mad Dog</span>
+                                <span className="text-sm font-bold text-[#003A5D]">Smiling Mad Dog</span>
                             </div>
                             <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 font-bold group-hover/item:bg-[#003A5D] group-hover/item:text-white transition-all">→</div>
                         </div>
@@ -762,7 +762,7 @@ const StrategicAllianceWidget = () => (
                                     colorClass="bg-yellow-400"
                                     textColorClass="text-[#003A5D]"
                                 />
-                                <span className="text-xs font-bold text-[#003A5D]">Wishbeer</span>
+                                <span className="text-sm font-bold text-[#003A5D]">Wishbeer</span>
                             </div>
                             <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 font-bold group-hover/item:bg-[#003A5D] group-hover/item:text-white transition-all">→</div>
                         </div>
