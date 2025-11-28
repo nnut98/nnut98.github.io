@@ -443,14 +443,22 @@ const BEER_DATA = [
 
 // --- HELPER FUNCTIONS ---
 
-const findMatch = (preferences) => {
+const findMatch = (preferences, currentId) => {
   const { hops, malt, body, style } = preferences;
   let candidates = BEER_DATA;
-  if (style !== 'All') candidates = BEER_DATA.filter(b => b.style === style);
+  if (style !== 'All') {
+      candidates = BEER_DATA.filter(b => b.style === style);
+  }
+  
   if (candidates.length === 0) candidates = BEER_DATA;
 
+  // New Random logic for 'Functional' or 'Sour'
   if (style === 'Functional' || style === 'Sour') {
-      return candidates[Math.floor(Math.random() * candidates.length)];
+      let pool = candidates;
+      if (currentId && pool.length > 1) {
+         pool = pool.filter(b => b.id !== currentId);
+      }
+      return pool[Math.floor(Math.random() * pool.length)];
   }
 
   const scoredBeers = candidates.map(beer => {
@@ -463,8 +471,24 @@ const findMatch = (preferences) => {
     if (style === 'Light') score += bodyDiff * 0.5;
     return { ...beer, score };
   });
+  
+  // Sort by score (lowest is best)
   scoredBeers.sort((a, b) => a.score - b.score);
-  return scoredBeers[0];
+
+  // Find all beers that share the best (lowest) score
+  const bestScore = scoredBeers[0].score;
+  let bestMatches = scoredBeers.filter(b => b.score === bestScore);
+
+  // If we have multiple best matches, filter out the current one to ensure variety
+  if (currentId && bestMatches.length > 1) {
+      const distinctMatches = bestMatches.filter(b => b.id !== currentId);
+      if (distinctMatches.length > 0) {
+          bestMatches = distinctMatches;
+      }
+  }
+
+  // Return a random beer from the best matches
+  return bestMatches[Math.floor(Math.random() * bestMatches.length)];
 };
 
 const getRandomBeer = () => BEER_DATA[Math.floor(Math.random() * BEER_DATA.length)];
@@ -998,7 +1022,7 @@ export default function App() {
     setIsAnimating(true);
     setPairingSuggestion(null); 
     setTimeout(() => {
-      const match = findMatch(preferences);
+      const match = findMatch(preferences, beer?.id); // Pass current beer ID
       setBeer(match);
       setIsAnimating(false);
     }, 600);
