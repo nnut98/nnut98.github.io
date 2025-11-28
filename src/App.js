@@ -623,7 +623,7 @@ const BrandLogo = ({ name, url, colorClass, textColorClass }) => {
         <img 
             src={url} 
             alt={name} 
-            className="h-6 w-auto object-contain mix-blend-multiply opacity-100 hover:scale-105 transition-transform" 
+            className="h-12 w-auto object-contain mix-blend-multiply opacity-100 hover:scale-105 transition-transform" 
             onError={() => setError(true)}
         />
     );
