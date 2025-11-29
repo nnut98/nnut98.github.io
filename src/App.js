@@ -1016,7 +1016,46 @@ export default function App() {
   };
   const handleLogout = () => { setIsLoggedIn(false); setUser(null); };
 
-  const handleStyleChange = (newStyle) => setPreferences(prev => ({ ...prev, style: newStyle }));
+   const handleStyleChange = (newStyle) => {
+    // 1. Update Style
+    const newPreferences = { ...preferences, style: newStyle };
+
+    // 2. Preset Sliders based on Style
+    switch (newStyle) {
+        case 'IPA':
+            newPreferences.hops = 5;
+            newPreferences.malt = 3;
+            newPreferences.body = 3;
+            break;
+        case 'Light':
+            newPreferences.hops = 2;
+            newPreferences.malt = 2;
+            newPreferences.body = 1;
+            break;
+        case 'Dark':
+            newPreferences.hops = 2;
+            newPreferences.malt = 5;
+            newPreferences.body = 4;
+            break;
+        case 'Functional':
+            newPreferences.hops = 2;
+            newPreferences.malt = 2;
+            newPreferences.body = 2;
+            break;
+        case 'Sour':
+            newPreferences.hops = 1;
+            newPreferences.malt = 1;
+            newPreferences.body = 1;
+            break;
+        default: // All
+            newPreferences.hops = 3;
+            newPreferences.malt = 3;
+            newPreferences.body = 3;
+            break;
+    }
+    
+    setPreferences(newPreferences);
+  };
 
   const handleFindMatch = () => {
     setIsAnimating(true);
